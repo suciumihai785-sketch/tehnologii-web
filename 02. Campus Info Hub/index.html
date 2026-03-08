@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Campus Info Hub - Acasă</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-inner">
+      <h1><a href="index.html">Campus Info Hub</a></h1>
+      <nav class="nav">
+        <ul>
+          <li><a href="index.html" class="active">Acasă</a></li>
+          <li><a href="pages/library.html">Biblioteca</a></li>
+          <li><a href="pages/cafeteria.html">Cantina</a></li>
+          <li><a href="pages/events.html">Evenimente</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h2>Bine ați venit în Campus</h2>
+      <p>Găsiți rapid informații despre biblioteci, cantină și evenimente. Explorați resursele disponibile pentru studenți.</p>
+      <p style="margin-top:1rem;"><a href="pages/library.html#schedule" class="btn-link">Sari la programul bibliotecii</a></p>
+    </section>
+
+    <section id="resurse-dinamice" class="section section-anchor">
+      <h2>Resurse Campus</h2>
+      
+      <div class="filters-panel">
+        <div class="filters">
+          <label for="filter-type">Tip:</label>
+          <select id="filter-type">
+            <option value="toate">Toate resursele</option>
+            <option value="studiu">Doar locuri de studiu</option>
+            <option value="alimentație">Alimentație</option>
+            <option value="eveniment">Evenimente</option>
+          </select>
+          <label for="filter-tag">Tag:</label>
+          <select id="filter-tag">
+            <option value="">Toate tag-urile</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="lista-resurse"></div>
+      <div id="resurse-filtrate"></div>
+      <div id="toate-tagurile"></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>&copy; 2025 Campus Info Hub — Resurse utile pentru studenți</p>
+  </footer>
+
+  <script src="js/app.js"></script>
+</body>
+</html>

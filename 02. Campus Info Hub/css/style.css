@@ -1,0 +1,383 @@
+/* Campus Info Hub - Professional Styles */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+:root {
+  --primary: #0f4c5c;
+  --primary-light: #1a6b7e;
+  --accent: #e07a5f;
+  --accent-soft: #f4a261;
+  --bg: #fafbfc;
+  --bg-card: #ffffff;
+  --text: #1d3557;
+  --text-muted: #457b9d;
+  --border: #e2e8f0;
+  --shadow-sm: 0 1px 3px rgba(15, 76, 92, 0.06);
+  --shadow-md: 0 4px 12px rgba(15, 76, 92, 0.08);
+  --shadow-lg: 0 12px 40px rgba(15, 76, 92, 0.12);
+  --radius: 12px;
+  --radius-sm: 8px;
+  --transition: 0.2s ease;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Header */
+.header {
+  background: linear-gradient(135deg, var(--primary) 0%, #0a3d4a 100%);
+  color: white;
+  padding: 0;
+  box-shadow: var(--shadow-md);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1.25rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.header h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.header h1 a {
+  color: white;
+  text-decoration: none;
+}
+
+.header h1 a:hover {
+  opacity: 0.95;
+}
+
+.nav ul {
+  list-style: none;
+  display: flex;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+}
+
+.nav a {
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-sm);
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: var(--transition);
+}
+
+.nav a:hover,
+.nav a.active {
+  color: white;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* Main content */
+main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2.5rem 2rem;
+}
+
+/* Hero section (home page) */
+.hero {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+  color: white;
+  padding: 3rem 2.5rem;
+  border-radius: var(--radius);
+  margin-bottom: 2.5rem;
+  box-shadow: var(--shadow-md);
+}
+
+.hero h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  color: white;
+  letter-spacing: -0.02em;
+}
+
+.hero p {
+  font-size: 1.05rem;
+  opacity: 0.95;
+  max-width: 560px;
+}
+
+.hero a {
+  color: var(--accent-soft);
+  text-decoration: none;
+  font-weight: 500;
+  border-bottom: 1px solid transparent;
+  transition: var(--transition);
+}
+
+.hero a:hover {
+  border-bottom-color: var(--accent-soft);
+}
+
+/* Sections */
+.section {
+  margin-bottom: 2.5rem;
+}
+
+.section h2 {
+  color: var(--primary);
+  margin-bottom: 1rem;
+  font-size: 1.35rem;
+  font-weight: 600;
+}
+
+.page-intro {
+  margin-bottom: 2rem;
+}
+
+.page-intro h2 {
+  font-size: 1.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.page-intro p {
+  color: var(--text-muted);
+  font-size: 1.05rem;
+}
+
+/* Cards */
+.card {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  padding: 1.5rem 1.75rem;
+  margin-bottom: 1rem;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
+  transition: var(--transition);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-md);
+  border-color: rgba(15, 76, 92, 0.12);
+}
+
+.card h3 {
+  color: var(--primary);
+  margin-bottom: 0.75rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.card h3::before {
+  content: '';
+  width: 4px;
+  height: 1.1em;
+  background: var(--accent);
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.card p {
+  margin-bottom: 0.4rem;
+  font-size: 0.95rem;
+  color: var(--text);
+}
+
+.card ul {
+  margin-left: 1.25rem;
+  margin-top: 0.5rem;
+}
+
+.card li {
+  margin-bottom: 0.35rem;
+  font-size: 0.95rem;
+}
+
+/* Type badges */
+.type-badge {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.type-badge.studiu { background: #d4edda; color: #155724; }
+.type-badge.alimentație { background: #fff3cd; color: #856404; }
+.type-badge.eveniment { background: #cce5ff; color: #004085; }
+
+/* Tags */
+.tag {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
+  color: white;
+  padding: 0.25rem 0.65rem;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  margin: 0.15rem 0.25rem 0.15rem 0;
+}
+
+/* Filters */
+.filters-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.filters {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.filters label {
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.filters select {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 0.95rem;
+  font-family: inherit;
+  background: white;
+  color: var(--text);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.filters select:hover,
+.filters select:focus {
+  border-color: var(--primary);
+  outline: none;
+}
+
+/* Resource list headers (from JS) */
+#lista-resurse h3,
+#resurse-filtrate h3,
+#toate-tagurile h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+  margin-top: 0;
+}
+
+#lista-resurse h3::before,
+#resurse-filtrate h3::before,
+#toate-tagurile h3::before {
+  display: none;
+}
+
+/* Links */
+a {
+  color: var(--primary);
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+a:hover {
+  color: var(--primary-light);
+  text-decoration: underline;
+}
+
+/* Footer */
+.footer {
+  background: var(--bg-card);
+  border-top: 1px solid var(--border);
+  text-align: center;
+  padding: 1.75rem 2rem;
+  margin-top: 3rem;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+/* Section anchor for fragment links */
+.section-anchor {
+  scroll-margin-top: 6rem;
+}
+
+/* Fragment link button style */
+.btn-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border-radius: var(--radius-sm);
+  font-weight: 500;
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.hero .btn-link:hover {
+  background: rgba(255, 255, 255, 0.3);
+  text-decoration: none;
+}
+
+.btn-link.btn-primary {
+  background: var(--primary) !important;
+  color: white !important;
+  padding: 0.5rem 1rem;
+}
+
+.btn-link.btn-primary:hover {
+  background: var(--primary-light) !important;
+  text-decoration: none;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .header-inner {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .nav ul {
+    justify-content: flex-start;
+  }
+
+  main {
+    padding: 1.5rem 1.25rem;
+  }
+
+  .hero {
+    padding: 2rem 1.5rem;
+  }
+
+  .filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

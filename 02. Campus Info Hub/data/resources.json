@@ -1,0 +1,46 @@
+{
+  "resources": [
+    {
+      "name": "Biblioteca Centrală",
+      "type": "studiu",
+      "location": "Clădirea A, Etaj 2",
+      "program": "L-V: 08:00-22:00, S: 09:00-14:00",
+      "tags": ["studiu", "cărți", "liniște"]
+    },
+    {
+      "name": "Sala de Lectură",
+      "type": "studiu",
+      "location": "Clădirea B, Etaj 1",
+      "program": "L-V: 07:00-23:00",
+      "tags": ["studiu", "individual", "wifi"]
+    },
+    {
+      "name": "Cantina Universitară",
+      "type": "alimentație",
+      "location": "Clădirea C, Parter",
+      "program": "L-V: 08:00-18:00",
+      "tags": ["mâncare", "prânz", "social"]
+    },
+    {
+      "name": "Cafeteria Starbucks",
+      "type": "alimentație",
+      "location": "Lobby Clădirea Principală",
+      "program": "L-V: 07:00-20:00",
+      "tags": ["cafea", "studiu", "wifi"]
+    },
+    {
+      "name": "Festivalul Studențesc",
+      "type": "eveniment",
+      "location": "Piața Centrală Campus",
+      "program": "15-17 Mai 2025",
+      "tags": ["muzică", "social", "distracție"]
+    },
+    {
+      "name": "Workshop Programare",
+      "type": "eveniment",
+      "location": "Sala 101, Clădirea Informatică",
+      "program": "Fiecare Sâmbătă 10:00-12:00",
+      "tags": ["studiu", "tehnologie", "workshop"]
+    }
+  ]
+}
