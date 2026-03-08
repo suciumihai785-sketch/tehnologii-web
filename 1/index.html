@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hackathon in4iT - Digital Future</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <div class="logo">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="1.2" stroke-linecap="round">
+                    <path d="M12 4v16M8 8c0 2 1 4 4 4s4-2 4-4"/>
+                    <path d="M8 12c0 2 2 3 4 3s4-1 4-3"/>
+                    <path d="M7 8c-1 1-1 3 0 4"/>
+                    <path d="M17 8c1 1 1 3 0 4"/>
+                    <path d="M6 12c-0.5 1 0 2.5 1 3"/>
+                    <path d="M18 12c0.5 1 0 2.5-1 3"/>
+                </svg>
+            </div>
+            <div class="header-title">
+                <h1>HACKATHON in4iT</h1>
+                <div class="date">Ed. a II-a: 20 - 23 iunie 2024</div>
+            </div>
+        </div>
+
+        <nav class="nav-desktop">
+            <a href="#home">HOME</a>
+            <a href="#regulament">ÎNSCRIERE</a>
+            <a href="#regulament">REGULAMENT</a>
+            <a href="https://facebook.com" class="facebook-icon" aria-label="Facebook">f</a>
+        </nav>
+
+        <button class="hamburger" aria-label="Meniu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </header>
+
+    <main>
+        <section class="hero" id="home">
+            <div class="hero-bg-pattern"></div>
+            <div class="hero-content">
+                <h2>Digital Future</h2>
+                <p>Ediția a II-a a hackathon-ului in4it-UAB, organizat de Universitatea „1 Decembrie 1918" din Alba Iulia, 20-23 iunie 2024.</p>
+                <p>Concursul constă în dezvoltarea și prezentarea unor proiecte ce includ o aplicație software, focalizate pe tema digitalizare.</p>
+                <a href="#regulament" class="btn-inscriere">Înscriere</a>
+            </div>
+        </section>
+
+        <section class="content-section" id="regulament">
+            <div class="content-wrapper">
+                <h3>Regulament participare</h3>
+                <p>Hackathon in4it-UAB se adresează studenților de la orice universitate din țară.</p>
+                <p>Înscrierea poate fi făcută atât individual cât și în echipe de maxim 5 persoane, indicând o temă de interes preferată.</p>
+                <p>Fiecare candidat, în momentul înregistrării, garantează că informațiile furnizate împreună sunt adevărate.</p>
+
+                <div class="separator"></div>
+
+                <div class="calendar-section">
+                    <h3>Calendar</h3>
+                    <ul class="calendar-list">
+                        <li><strong>Perioada de inscriere:</strong> 1 feb – 15 martie 2024</li>
+                        <li><strong>Preselecția:</strong> 18-22 martie 2024</li>
+                        <li><strong>Afișarea echipelor selectate:</strong> 25 martie 2024</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-logo">
+            <div class="uab-shield">
+                <svg viewBox="0 0 50 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M25 2L48 15V45L25 58L2 45V15L25 2Z" stroke="white" stroke-width="2" fill="none"/>
+                    <text x="25" y="32" text-anchor="middle" fill="white" font-size="14" font-weight="bold" font-family="sans-serif">UAB</text>
+                </svg>
+            </div>
+            <div class="university-name">
+                <div class="line1">Universitatea</div>
+                <div class="line2">1 Decembrie 1918</div>
+                <div class="line3">din Alba Iulia</div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const nav = document.querySelector('.nav-desktop');
+        const hamburger = document.querySelector('.hamburger');
+        hamburger.addEventListener('click', function() {
+            nav.classList.toggle('mobile-open');
+        });
+        nav.querySelectorAll('a').forEach(function(link) {
+            link.addEventListener('click', function() {
+                nav.classList.remove('mobile-open');
+            });
+        });
+        window.addEventListener('resize', function() {
+            if (window.innerWidth >= 768) nav.classList.remove('mobile-open');
+        });
+    </script>
+</body>
+</html>
