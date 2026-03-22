@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inregistrare</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Inregistrare cont</h1>
+        <nav class="nav">
+            <a href="index.html">Acasa</a>
+            <a href="login.html">Login</a>
+        </nav>
+
+        <div id="messageBox"></div>
+
+        <form id="registerForm" class="card">
+            <label for="username">Username (minim 3 caractere)</label>
+            <input id="username" type="text" minlength="3" required>
+
+            <label for="email">Email</label>
+            <input id="email" type="email" required>
+
+            <label for="password">Parola (minim 6 caractere)</label>
+            <input id="password" type="password" minlength="6" required>
+
+            <label for="confirmPassword">Confirmare parola</label>
+            <input id="confirmPassword" type="password" minlength="6" required>
+
+            <button type="submit">Creeaza cont</button>
+        </form>
+    </div>
+
+    <script src="js/cookies.js"></script>
+    <script src="js/storage.js"></script>
+    <script>
+        const USERS_KEY = 'users';
+
+        function showMessage(type, text) {
+            const box = document.getElementById('messageBox');
+            box.className = `alert ${type === 'success' ? 'alert-success' : 'alert-error'}`;
+            box.textContent = text;
+        }
+
+        function getUsers() {
+            const users = StorageManager.getLocal(USERS_KEY);
+            return Array.isArray(users) ? users : [];
+        }
+
+        function isValidEmail(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        }
+
+        (function applyThemeFromCookie() {
+            const theme = typeof CookieManager !== 'undefined' ? (CookieManager.get('theme') || 'light') : 'light';
+            document.body.classList.remove('light', 'dark');
+            document.body.classList.add(theme === 'dark' ? 'dark' : 'light');
+        })();
+
+        document.getElementById('registerForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const username = document.getElementById('username').value.trim();
+            const email = document.getElementById('email').value.trim().toLowerCase();
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (!username || !email || !password || !confirmPassword) {
+                showMessage('error', 'Toate campurile sunt obligatorii.');
+                return;
+            }
+            if (username.length < 3) {
+                showMessage('error', 'Username-ul trebuie sa aiba minim 3 caractere.');
+                return;
+            }
+            if (!isValidEmail(email)) {
+                showMessage('error', 'Email invalid.');
+                return;
+            }
+            if (password.length < 6) {
+                showMessage('error', 'Parola trebuie sa aiba minim 6 caractere.');
+                return;
+            }
+            if (password !== confirmPassword) {
+                showMessage('error', 'Parolele nu coincid.');
+                return;
+            }
+
+            const users = getUsers();
+            if (users.some(u => u.username.toLowerCase() === username.toLowerCase())) {
+                showMessage('error', 'Username-ul exista deja.');
+                return;
+            }
+            if (users.some(u => u.email.toLowerCase() === email)) {
+                showMessage('error', 'Email-ul exista deja.');
+                return;
+            }
+
+            const newUser = {
+                id: users.length ? Math.max(...users.map(u => u.id || 0)) + 1 : 1,
+                username,
+                email,
+                password
+            };
+            users.push(newUser);
+            StorageManager.setLocal(USERS_KEY, users);
+
+            showMessage('success', 'Cont creat cu succes. Redirectionare catre login...');
+            setTimeout(function() {
+                window.location.href = 'login.html';
+            }, 1200);
+        });
+    </script>
+</body>
+</html>

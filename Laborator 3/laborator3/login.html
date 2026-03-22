@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Autentificare</h1>
+        <nav class="nav">
+            <a href="index.html">Acasa</a>
+            <a href="register.html">Inregistrare</a>
+        </nav>
+
+        <div id="messageBox"></div>
+
+        <form id="loginForm" class="card">
+            <label for="username">Username</label>
+            <input id="username" type="text" required>
+
+            <label for="password">Parola</label>
+            <input id="password" type="password" required>
+
+            <label>
+                <input id="rememberMe" type="checkbox" style="width:auto; margin-right: 8px;">
+                Tine-ma minte
+            </label>
+
+            <button type="submit">Login</button>
+        </form>
+
+        <p class="small">
+            Nu ai cont? <a href="register.html">Mergi la inregistrare</a>
+        </p>
+    </div>
+
+    <script src="js/cookies.js"></script>
+    <script src="js/storage.js"></script>
+    <script>
+        const USERS_KEY = 'users';
+        const REMEMBER_KEY = 'rememberedUsername';
+        const SESSION_KEY = 'session';
+
+        function showMessage(type, text) {
+            const box = document.getElementById('messageBox');
+            box.className = `alert ${type === 'success' ? 'alert-success' : 'alert-error'}`;
+            box.textContent = text;
+        }
+
+        function ensureDefaultUsers() {
+            const existing = StorageManager.getLocal(USERS_KEY);
+            if (Array.isArray(existing) && existing.length > 0) {
+                return;
+            }
+            const defaultUsers = [
+                { id: 1, username: 'admin', password: 'password', email: 'admin@example.com' },
+                { id: 2, username: 'student', password: 'student123', email: 'student@example.com' }
+            ];
+            StorageManager.setLocal(USERS_KEY, defaultUsers);
+        }
+
+        function generateSessionId() {
+            return 'sess-' + Math.random().toString(36).slice(2) + '-' + Date.now();
+        }
+
+        function preloadRememberedUser() {
+            const remembered = StorageManager.getLocal(REMEMBER_KEY);
+            if (remembered) {
+                document.getElementById('username').value = remembered;
+                document.getElementById('rememberMe').checked = true;
+            }
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            const rememberMe = document.getElementById('rememberMe').checked;
+
+            const users = StorageManager.getLocal(USERS_KEY) || [];
+            const matchedUser = users.find(u => u.username === username && u.password === password);
+
+            if (!matchedUser) {
+                showMessage('error', 'Username sau parola incorecta.');
+                return;
+            }
+
+            if (rememberMe) {
+                StorageManager.setLocal(REMEMBER_KEY, username);
+            } else {
+                StorageManager.removeLocal(REMEMBER_KEY);
+            }
+
+            const session = {
+                userId: matchedUser.id,
+                username: matchedUser.username,
+                email: matchedUser.email,
+                loginTime: new Date().toISOString(),
+                sessionId: generateSessionId()
+            };
+            StorageManager.setSession(SESSION_KEY, session);
+
+            showMessage('success', 'Autentificare reusita. Redirectionare...');
+            setTimeout(function() {
+                window.location.href = 'dashboard.html';
+            }, 900);
+        });
+
+        (function applyThemeFromCookie() {
+            const theme = typeof CookieManager !== 'undefined' ? (CookieManager.get('theme') || 'light') : 'light';
+            document.body.classList.remove('light', 'dark');
+            document.body.classList.add(theme === 'dark' ? 'dark' : 'light');
+        })();
+        ensureDefaultUsers();
+        preloadRememberedUser();
+    </script>
+</body>
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cos de Cumparaturi</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Cos de Cumparaturi</h1>
+        <nav class="nav">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="index.html">Acasa</a>
+        </nav>
+
+        <div class="card">
+            <h2>Adauga produs</h2>
+            <form id="cartForm">
+                <label for="product">Produs</label>
+                <select id="product"></select>
+
+                <label for="quantity">Cantitate (1-10)</label>
+                <input id="quantity" type="number" min="1" max="10" value="1" required>
+
+                <button type="submit">Adauga in Cos</button>
+            </form>
+        </div>
+
+        <div class="card">
+            <h2>Continut cos</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Produs</th>
+                        <th>Cantitate</th>
+                        <th>Pret unitar</th>
+                        <th>Subtotal</th>
+                        <th>Actiune</th>
+                    </tr>
+                </thead>
+                <tbody id="cartBody"></tbody>
+            </table>
+            <p><strong>TOTAL:</strong> <span id="total">0</span> RON</p>
+            <button id="clearCartBtn" class="btn-danger">Goleste Cosul</button>
+        </div>
+    </div>
+
+    <script src="js/cookies.js"></script>
+    <script src="js/storage.js"></script>
+    <script>
+        const SESSION_KEY = 'session';
+        const CART_KEY = 'cart';
+        const products = {
+            laptop: { name: 'Laptop', price: 2500 },
+            telefon: { name: 'Telefon', price: 1200 },
+            tableta: { name: 'Tabletă', price: 800 },
+            casti: { name: 'Căști', price: 150 }
+        };
+
+        function redirectIfNotAuthenticated() {
+            const session = StorageManager.getSession(SESSION_KEY);
+            if (!session) {
+                window.location.href = 'login.html';
+                return false;
+            }
+            return true;
+        }
+
+        function loadCart() {
+            return StorageManager.getSession(CART_KEY) || {};
+        }
+
+        function saveCart(cart) {
+            StorageManager.setSession(CART_KEY, cart);
+        }
+
+        function renderProductSelect() {
+            const select = document.getElementById('product');
+            select.innerHTML = '';
+            Object.entries(products).forEach(([key, item]) => {
+                const option = document.createElement('option');
+                option.value = key;
+                option.textContent = `${item.name} - ${item.price} RON`;
+                select.appendChild(option);
+            });
+        }
+
+        function renderCart() {
+            const cart = loadCart();
+            const body = document.getElementById('cartBody');
+            const entries = Object.entries(cart);
+            body.innerHTML = '';
+
+            if (!entries.length) {
+                body.innerHTML = '<tr><td colspan="5">Cosul este gol.</td></tr>';
+                document.getElementById('total').textContent = '0';
+                return;
+            }
+
+            let total = 0;
+            entries.forEach(([productKey, qty]) => {
+                if (!products[productKey]) {
+                    return;
+                }
+                const product = products[productKey];
+                const subtotal = product.price * qty;
+                total += subtotal;
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${product.name}</td>
+                    <td>${qty}</td>
+                    <td>${product.price} RON</td>
+                    <td>${subtotal} RON</td>
+                    <td><button class="btn-danger" data-remove="${productKey}">Sterge</button></td>
+                `;
+                body.appendChild(tr);
+            });
+
+            document.getElementById('total').textContent = String(total);
+        }
+
+        document.getElementById('cartForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const productKey = document.getElementById('product').value;
+            const quantity = parseInt(document.getElementById('quantity').value, 10);
+
+            if (!products[productKey]) {
+                return;
+            }
+            if (Number.isNaN(quantity) || quantity < 1 || quantity > 10) {
+                alert('Cantitatea trebuie sa fie intre 1 si 10.');
+                return;
+            }
+
+            const cart = loadCart();
+            cart[productKey] = (cart[productKey] || 0) + quantity;
+            saveCart(cart);
+            renderCart();
+            document.getElementById('quantity').value = '1';
+        });
+
+        document.addEventListener('click', function(event) {
+            const removeBtn = event.target.closest('button[data-remove]');
+            if (removeBtn) {
+                const productKey = removeBtn.dataset.remove;
+                const cart = loadCart();
+                delete cart[productKey];
+                saveCart(cart);
+                renderCart();
+                return;
+            }
+
+            if (event.target.id === 'clearCartBtn') {
+                saveCart({});
+                renderCart();
+            }
+        });
+
+        (function applyThemeFromCookie() {
+            const theme = typeof CookieManager !== 'undefined' ? (CookieManager.get('theme') || 'light') : 'light';
+            document.body.classList.remove('light', 'dark');
+            document.body.classList.add(theme === 'dark' ? 'dark' : 'light');
+        })();
+
+        if (redirectIfNotAuthenticated()) {
+            renderProductSelect();
+            renderCart();
+        }
+    </script>
+</body>
+</html>

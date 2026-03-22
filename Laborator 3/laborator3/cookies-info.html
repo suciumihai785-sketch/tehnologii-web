@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informatii Cookies si Storage</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Informatii Cookies si Storage</h1>
+        <nav class="nav">
+            <a href="index.html">Acasa</a>
+            <a href="preferences.html">Preferinte</a>
+            <a href="dashboard.html">Dashboard</a>
+        </nav>
+
+        <section class="card">
+            <h2>Cookies</h2>
+            <p><strong>document.cookie:</strong></p>
+            <pre id="rawCookie"></pre>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nume</th>
+                        <th>Valoare</th>
+                        <th>Lungime</th>
+                        <th>Actiune</th>
+                    </tr>
+                </thead>
+                <tbody id="cookiesTbody"></tbody>
+            </table>
+        </section>
+
+        <section class="card">
+            <h2>localStorage</h2>
+            <pre id="localJson"></pre>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Cheie</th>
+                        <th>Valoare</th>
+                        <th>Dimensiune</th>
+                        <th>Actiune</th>
+                    </tr>
+                </thead>
+                <tbody id="localTbody"></tbody>
+            </table>
+        </section>
+
+        <section class="card">
+            <h2>sessionStorage</h2>
+            <pre id="sessionJson"></pre>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Cheie</th>
+                        <th>Valoare</th>
+                        <th>Dimensiune</th>
+                        <th>Actiune</th>
+                    </tr>
+                </thead>
+                <tbody id="sessionTbody"></tbody>
+            </table>
+        </section>
+
+        <section class="card">
+            <h2>Tabel comparativ</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tip</th>
+                        <th>Capacitate</th>
+                        <th>Expirare</th>
+                        <th>Trimis la server?</th>
+                        <th>Accesibil din?</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Cookies</td>
+                        <td>~4KB/cookie</td>
+                        <td>Setata explicit sau la inchiderea browserului</td>
+                        <td>Da (automat, la request-uri HTTP)</td>
+                        <td>Toate tab-urile pe acelasi domeniu</td>
+                    </tr>
+                    <tr>
+                        <td>localStorage</td>
+                        <td>~5-10MB/origin</td>
+                        <td>Persista pana la stergere</td>
+                        <td>Nu</td>
+                        <td>Toate tab-urile pe acelasi origin</td>
+                    </tr>
+                    <tr>
+                        <td>sessionStorage</td>
+                        <td>~5MB/origin/tab</td>
+                        <td>Valabil pe durata tab-ului curent</td>
+                        <td>Nu</td>
+                        <td>Doar tab-ul curent</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <script src="js/cookies.js"></script>
+    <script src="js/storage.js"></script>
+    <script>
+        function applyThemeFromCookie() {
+            const theme = CookieManager.get('theme') || 'light';
+            document.body.classList.remove('light', 'dark');
+            document.body.classList.add(theme === 'dark' ? 'dark' : 'light');
+        }
+
+        function toText(value) {
+            return typeof value === 'string' ? value : JSON.stringify(value);
+        }
+
+        function calculateSize(value) {
+            return new Blob([toText(value)]).size + ' bytes';
+        }
+
+        function renderCookies() {
+            const tbody = document.getElementById('cookiesTbody');
+            const allCookies = CookieManager.getAll();
+            const entries = Object.entries(allCookies);
+            tbody.innerHTML = '';
+
+            if (!entries.length) {
+                tbody.innerHTML = '<tr><td colspan="4">Nu exista cookies.</td></tr>';
+            } else {
+                entries.forEach(([name, value]) => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${name}</td>
+                        <td>${value}</td>
+                        <td>${value.length}</td>
+                        <td><button class="btn-danger" data-type="cookie" data-key="${name}">Sterge</button></td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            }
+            document.getElementById('rawCookie').textContent = document.cookie || '(gol)';
+        }
+
+        function renderStorage(tableId, dataObj, type) {
+            const tbody = document.getElementById(tableId);
+            const entries = Object.entries(dataObj || {});
+            tbody.innerHTML = '';
+            if (!entries.length) {
+                tbody.innerHTML = '<tr><td colspan="4">Nu exista date.</td></tr>';
+                return;
+            }
+            entries.forEach(([key, value]) => {
+                const displayValue = toText(value);
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${key}</td>
+                    <td>${displayValue}</td>
+                    <td>${calculateSize(displayValue)}</td>
+                    <td><button class="btn-danger" data-type="${type}" data-key="${key}">Sterge</button></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function renderAll() {
+            renderCookies();
+            const localData = StorageManager.getAllLocal();
+            const sessionData = StorageManager.getAllSession();
+            renderStorage('localTbody', localData, 'local');
+            renderStorage('sessionTbody', sessionData, 'session');
+            document.getElementById('localJson').textContent = JSON.stringify(localData, null, 2);
+            document.getElementById('sessionJson').textContent = JSON.stringify(sessionData, null, 2);
+        }
+
+        document.addEventListener('click', function(event) {
+            const btn = event.target.closest('button[data-type]');
+            if (!btn) {
+                return;
+            }
+            const key = btn.dataset.key;
+            const type = btn.dataset.type;
+            if (type === 'cookie') {
+                CookieManager.delete(key);
+            } else if (type === 'local') {
+                StorageManager.removeLocal(key);
+            } else if (type === 'session') {
+                StorageManager.removeSession(key);
+            }
+            renderAll();
+        });
+
+        applyThemeFromCookie();
+        renderAll();
+    </script>
+</body>
+</html>

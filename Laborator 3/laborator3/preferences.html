@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preferinte</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Setari Preferinte</h1>
+        <nav class="nav">
+            <a href="index.html">Acasa</a>
+            <a href="cookies-info.html">Cookies Info</a>
+            <a href="login.html">Login</a>
+        </nav>
+
+        <div id="messageBox"></div>
+
+        <form id="preferencesForm" class="card">
+            <label for="username">Nume utilizator</label>
+            <input id="username" name="username" type="text" placeholder="Ex: Mihai" required>
+
+            <label for="theme">Tema</label>
+            <select id="theme" name="theme">
+                <option value="light">Luminos</option>
+                <option value="dark">Intunecat</option>
+            </select>
+
+            <label for="language">Limba</label>
+            <select id="language" name="language">
+                <option value="Română">Română</option>
+                <option value="English">English</option>
+                <option value="Français">Français</option>
+            </select>
+
+            <label for="fontSize">Dimensiune font</label>
+            <select id="fontSize" name="fontSize">
+                <option value="14px">14px</option>
+                <option value="16px">16px</option>
+                <option value="18px">18px</option>
+                <option value="20px">20px</option>
+            </select>
+
+            <button type="submit">Salveaza preferintele</button>
+        </form>
+    </div>
+
+    <script src="js/cookies.js"></script>
+    <script src="js/storage.js"></script>
+    <script>
+        function applyTheme(theme) {
+            document.body.classList.remove('light', 'dark');
+            document.body.classList.add(theme === 'dark' ? 'dark' : 'light');
+        }
+
+        function showMessage(type, text) {
+            const box = document.getElementById('messageBox');
+            box.className = `alert ${type === 'success' ? 'alert-success' : 'alert-error'}`;
+            box.textContent = text;
+        }
+
+        function loadSavedPreferences() {
+            const username = CookieManager.get('username') || '';
+            const theme = CookieManager.get('theme') || 'light';
+            let language = StorageManager.getLocal('language') || 'Română';
+            if (language === 'Romana') language = 'Română';
+            if (language === 'Francais') language = 'Français';
+            const fontSize = StorageManager.getLocal('fontSize') || '16px';
+
+            document.getElementById('username').value = username;
+            document.getElementById('theme').value = theme;
+            document.getElementById('language').value = language;
+            document.getElementById('fontSize').value = fontSize;
+
+            applyTheme(theme);
+            document.documentElement.style.fontSize = fontSize;
+        }
+
+        document.getElementById('preferencesForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const username = document.getElementById('username').value.trim();
+            const theme = document.getElementById('theme').value;
+            const language = document.getElementById('language').value;
+            const fontSize = document.getElementById('fontSize').value;
+
+            CookieManager.set('username', username || 'Vizitator');
+            CookieManager.set('theme', theme);
+            StorageManager.setLocal('language', language);
+            StorageManager.setLocal('fontSize', fontSize);
+
+            applyTheme(theme);
+            document.documentElement.style.fontSize = fontSize;
+            showMessage('success', 'Preferintele au fost salvate cu succes. Redirectionare...');
+
+            setTimeout(function() {
+                window.location.href = 'index.html';
+            }, 1500);
+        });
+
+        loadSavedPreferences();
+    </script>
+</body>
+</html>

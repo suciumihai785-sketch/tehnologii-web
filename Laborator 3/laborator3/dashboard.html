@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Dashboard utilizator</h1>
+        <nav class="nav">
+            <a href="index.html">Acasa</a>
+            <a href="cart.html">Cos de Cumparaturi</a>
+            <a href="dashboard.html" target="_blank" rel="noopener noreferrer">Deschide dashboard in tab nou</a>
+        </nav>
+
+        <section class="card">
+            <h2>Informatii sesiune</h2>
+            <table>
+                <tbody>
+                    <tr><th>ID sesiune</th><td id="sessionId"></td></tr>
+                    <tr><th>Username</th><td id="username"></td></tr>
+                    <tr><th>Email</th><td id="email"></td></tr>
+                    <tr><th>Ora autentificarii</th><td id="loginTime"></td></tr>
+                    <tr><th>Durata sesiune</th><td id="sessionDuration"></td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="card">
+            <h2>sessionStorage brut (debug)</h2>
+            <pre id="rawSession"></pre>
+        </section>
+
+        <button id="logoutBtn" class="btn-danger">Deconectare</button>
+    </div>
+
+    <script src="js/cookies.js"></script>
+    <script src="js/storage.js"></script>
+    <script>
+        const SESSION_KEY = 'session';
+        let timerId = null;
+
+        function formatDuration(ms) {
+            const totalSeconds = Math.floor(ms / 1000);
+            const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
+            const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
+            const seconds = String(totalSeconds % 60).padStart(2, '0');
+            return `${hours}:${minutes}:${seconds}`;
+        }
+
+        function redirectIfNotAuthenticated() {
+            const session = StorageManager.getSession(SESSION_KEY);
+            if (!session) {
+                window.location.href = 'login.html';
+                return null;
+            }
+            return session;
+        }
+
+        function renderSession(session) {
+            document.getElementById('sessionId').textContent = session.sessionId;
+            document.getElementById('username').textContent = session.username;
+            document.getElementById('email').textContent = session.email;
+            document.getElementById('loginTime').textContent = new Date(session.loginTime).toLocaleString('ro-RO');
+            document.getElementById('rawSession').textContent = JSON.stringify(StorageManager.getAllSession(), null, 2);
+
+            const loginMs = new Date(session.loginTime).getTime();
+            const updateDuration = function() {
+                document.getElementById('sessionDuration').textContent = formatDuration(Date.now() - loginMs);
+            };
+            updateDuration();
+            timerId = setInterval(updateDuration, 1000);
+        }
+
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+            if (timerId) {
+                clearInterval(timerId);
+            }
+            StorageManager.removeSession(SESSION_KEY);
+            StorageManager.removeSession('cart');
+            window.location.href = 'login.html';
+        });
+
+        (function applyThemeFromCookie() {
+            const theme = typeof CookieManager !== 'undefined' ? (CookieManager.get('theme') || 'light') : 'light';
+            document.body.classList.remove('light', 'dark');
+            document.body.classList.add(theme === 'dark' ? 'dark' : 'light');
+        })();
+
+        const session = redirectIfNotAuthenticated();
+        if (session) {
+            renderSession(session);
+        }
+    </script>
+</body>
+</html>
