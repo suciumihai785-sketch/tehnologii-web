@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculator MVC</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="calculator" aria-label="Calculator">
+    <section class="display" aria-live="polite">
+      <div id="expression" class="expression"></div>
+      <div id="result" class="result">0</div>
+    </section>
+
+    <section class="keys" aria-label="Taste calculator">
+      <button type="button" class="btn btn-action" data-action="clear">AC</button>
+      <button type="button" class="btn btn-operator" data-operator="/">/</button>
+      <button type="button" class="btn btn-operator" data-operator="*">*</button>
+      <button type="button" class="btn btn-operator" data-operator="-">-</button>
+
+      <button type="button" class="btn btn-number" data-number="7">7</button>
+      <button type="button" class="btn btn-number" data-number="8">8</button>
+      <button type="button" class="btn btn-number" data-number="9">9</button>
+      <button type="button" class="btn btn-operator" data-operator="+">+</button>
+
+      <button type="button" class="btn btn-number" data-number="4">4</button>
+      <button type="button" class="btn btn-number" data-number="5">5</button>
+      <button type="button" class="btn btn-number" data-number="6">6</button>
+      <button type="button" class="btn btn-equals" data-action="equals">=</button>
+
+      <button type="button" class="btn btn-number" data-number="1">1</button>
+      <button type="button" class="btn btn-number" data-number="2">2</button>
+      <button type="button" class="btn btn-number" data-number="3">3</button>
+      <button type="button" class="btn btn-number btn-zero" data-number="0">0</button>
+    </section>
+  </main>
+
+  <script src="model.js"></script>
+  <script src="view.js"></script>
+  <script src="controller.js"></script>
+</body>
+</html>
